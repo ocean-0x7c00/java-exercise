@@ -4,6 +4,9 @@ import java.util.Date;
 
 /**
  * 实现深克隆
+ * <p>
+ * 先对要复制的对象调用clone方法，然后在对对象中的非基本数据类型也调用
+ * clone()方法完成复制
  *
  * @author yancy
  * @date 2019/6/17
