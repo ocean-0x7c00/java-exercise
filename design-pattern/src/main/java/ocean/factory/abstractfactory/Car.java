@@ -1,4 +1,6 @@
-package ocean.factory.factorymethod;
+package ocean.factory.abstractfactory;
+
+import ocean.factory.factorymethod.Moveable;
 
 /**
  * @author yancy

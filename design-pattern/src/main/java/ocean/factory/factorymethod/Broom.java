@@ -4,9 +4,9 @@ package ocean.factory.factorymethod;
  * @author yancy
  * @date 2019/6/24
  */
-public class Plane implements Moveable {
+public class Broom implements Moveable{
     @Override
     public void go() {
-        System.out.println("Plane go .....");
+        System.out.println("Broom flying ...");
     }
 }
