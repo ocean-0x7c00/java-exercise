@@ -12,6 +12,7 @@
         <module>java-basic</module>
         <module>design-pattern</module>
         <module>java-tools</module>
+        <module>java-algorithm</module>
     </modules>
 
 
