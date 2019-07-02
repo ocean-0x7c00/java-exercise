@@ -25,6 +25,10 @@ package ocean.search;
  * 4.jdk中 int mid = (low + high) >>> 1 的好处是什么？
  * jdk6 求mid的方式是int mid = (low + high) >> 1，这样做有什么问题？
  * 5.关于移位运算和溢出的基础知识详见《计算机组成原理》，并结合https://coolshell.cn/articles/11466.html
+ * <p>
+ * <p>
+ * 适用情况
+ * 表中数据已读操作为主，很少进行写操作
  *
  * @author yancy
  * @date 2019/7/2
