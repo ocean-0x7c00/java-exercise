@@ -1,4 +1,4 @@
-package ocean.search;
+package ocean.search.stationary;
 
 /**
  * 二分查找的基本思想：
