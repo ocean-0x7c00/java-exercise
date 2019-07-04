@@ -1,4 +1,4 @@
-package knowledge.basic;
+package ocean.basic;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

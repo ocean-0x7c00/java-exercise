@@ -1,4 +1,4 @@
-package knowledge.inner;
+package ocean.inner;
 
 /**
  * 思路：
