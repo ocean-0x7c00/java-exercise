@@ -1,5 +1,7 @@
 package ocean.collections.collection.list;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,5 +14,10 @@ public class LinkedLists {
         LinkedList list = new LinkedList<>();
         list.add(1);
         System.out.println();
+        HashMap<String, String> map = new HashMap();
+        map.put("name", "Lee");
+
+        Hashtable hashtable = new Hashtable();
+        hashtable.put("", "");
     }
 }
