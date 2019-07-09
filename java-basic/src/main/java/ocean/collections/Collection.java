@@ -1,4 +1,4 @@
-package ocean.collections.collection;
+package ocean.collections;
 
 /**
  * @author yancy
