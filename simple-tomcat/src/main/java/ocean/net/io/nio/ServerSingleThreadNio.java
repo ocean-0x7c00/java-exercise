@@ -13,6 +13,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
+ * 同步-异步-阻塞-非阻塞
+ * 同步、异步关注的是消息的通信机制
+ * 阻塞和非阻塞关注的是等待时消息时的状态
+ *
  * @author yancy
  * @date 2019/7/21
  */
