@@ -53,3 +53,5 @@
 [tomcat源码分析(第一篇 从整体架构开始)](https://juejin.im/post/5ae170ea51882567244daef5)
 
 [tomcat源码分析(第二篇 tomcat启动过程详解)](https://juejin.im/post/5af176196fb9a07ac90d2ac8)
+
+[关于亲密关系](https://www.jianshu.com/p/2746aa7689ee)
