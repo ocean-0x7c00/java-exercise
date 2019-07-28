@@ -1,0 +1,39 @@
+Classfile /Users/yancy/IdeaProjects/java-exercise/java-basic/src/main/java/ocean/jvm/Simple.class
+  Last modified 2019-7-28; size 267 bytes
+  MD5 checksum 85bb94f0631fa3973058bc5708bc20c5
+  Compiled from "Simple.java"
+public class ocean.jvm.Simple
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #3.#14         // java/lang/Object."<init>":()V
+   #2 = Class              #15            // ocean/jvm/Simple
+   #3 = Class              #16            // java/lang/Object
+   #4 = Utf8               name
+   #5 = Utf8               Ljava/lang/String;
+   #6 = Utf8               ConstantValue
+   #7 = String             #17            // hello
+   #8 = Utf8               <init>
+   #9 = Utf8               ()V
+  #10 = Utf8               Code
+  #11 = Utf8               LineNumberTable
+  #12 = Utf8               SourceFile
+  #13 = Utf8               Simple.java
+  #14 = NameAndType        #8:#9          // "<init>":()V
+  #15 = Utf8               ocean/jvm/Simple
+  #16 = Utf8               java/lang/Object
+  #17 = Utf8               hello
+{
+  public ocean.jvm.Simple();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 7: 0
+}
+SourceFile: "Simple.java"
