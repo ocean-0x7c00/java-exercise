@@ -14,6 +14,7 @@
         <module>java-tools</module>
         <module>java-algorithm</module>
         <module>simple-tomcat</module>
+        <module>java-log-framework</module>
     </modules>
 
     <dependencies>
