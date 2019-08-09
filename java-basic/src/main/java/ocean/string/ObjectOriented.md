@@ -3,11 +3,12 @@
 目标
 ```markdown
 1. 软件开发中的编程思想
-2. 面向过程存在的问题
-2. 什么是面向对象编程以及面向对象编程产生的原因
-3. 通过一个具体的例子来理解什么是面向过程编程、什么是面向对象编程
-3. 面向对象编程和面向过程编程之间的差异
-4. 面向对象编程中的基本概念
+2. 一个关于面向对象和面向过程的例子
+3. 面向过程存在的问题
+4. 什么是面向对象编程以及面向对象编程产生的原因
+5. 通过一个具体的例子来理解什么是面向过程编程、什么是面向对象编程
+6. 面向对象编程和面向过程编程之间的差异
+7. 面向对象编程中的基本概念
 ```
 
 ## 软件开发中的编程思想
@@ -17,7 +18,6 @@ a few paradigms like Procedural Programming, Object oriented programming, Functi
 which can help in modeling the business requirements into computer programs
 OOP is a philosophy and is language neutral.
 ```
-
 
 ## 面向对象编程概述
 
@@ -43,7 +43,7 @@ OOP is a philosophy and is language neutral.
 [Beginner's guide - Object Oriented Programming](https://dev.to/charanrajgolla/beginners-guide---object-oriented-programming#concepts)
 [DIFFERENCE BETWEEN OBJECT-ORIENTED PROGRAMMING AND PROCEDURAL PROGRAMMING LANGUAGES](https://neonbrand.com/website-design/procedural-programming-vs-object-oriented-programming-a-review/)
 [一位十年软件工程师告诉你什么是编程思想](https://blog.csdn.net/shupan001/article/details/6824668)
-(https://study.com/academy/lesson/object-oriented-programming-vs-procedural-programming.html)
+[](https://study.com/academy/lesson/object-oriented-programming-vs-procedural-programming.html)
 [Can anyone please provide me with an example that can help me to understand Procedural, functional, Logic and Object Oriented programming models side by side by using nearly same example-problem.](https://stackoverflow.com/questions/7592505/can-you-represent-the-same-example-using-procedural-functional-logic-and-oo-pr)
 [](https://ask.hellobi.com/blog/Data_AnalysisR/10598)
 

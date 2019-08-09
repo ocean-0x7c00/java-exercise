@@ -1,0 +1,65 @@
+{
+  "data": {
+    "gatewayId": "asd",
+    "records": [
+      {
+        "ms": 123,
+        "points": [
+          {
+            "sensorId": "asdasd",
+            "sensorType": "asdasd",
+            "batt": 12,
+            "kw": 2
+          },
+          {
+            "sensorId": "123",
+            "sensorType": "as123dasd",
+            "batt": 12,
+            "kw": 2
+          }
+        ]
+      },
+      {
+        "ms": 123123,
+        "points": [
+          {
+            "sensorId": "asdasd",
+            "sensorType": "asdasd",
+            "batt": 12,
+            "kw": 2
+          },
+          {
+            "sensorId": "123",
+            "sensorType": "as123dasd",
+            "batt": 12,
+            "kw": 2
+          }
+        ]
+      }
+    ]
+  },
+  "gatewayType": "Asdasd"
+}
+
+//扁平化之后的结构
+//root.gatewayType="Asdasd"
+//root.data.gatewayId="asd"
+//root.data.records[0].ms=123
+//root.data.records[0].points[0].sensorId="asdasd"
+//root.data.records[0].points[0].sensorType="asdasd"
+//root.data.records[0].points[0].batt=12
+//root.data.records[0].points[0].kw=2
+//root.data.records[0].points[1].sensorId="123"
+//root.data.records[0].points[1].sensorType="as123dasd"
+//root.data.records[0].points[1].batt=12
+//root.data.records[0].points[1].kw=2
+//root.data.records[1].ms=123123
+//root.data.records[1].points[0].sensorId="asdasd"
+//root.data.records[1].points[0].sensorType="asdasd"
+//root.data.records[1].points[0].batt=12
+//root.data.records[1].points[0].kw=2
+//root.data.records[1].points[1].sensorId="123"
+//root.data.records[1].points[1].sensorType="as123dasd"
+//root.data.records[1].points[1].batt=12
+//root.data.records[1].points[1].kw=2
+
