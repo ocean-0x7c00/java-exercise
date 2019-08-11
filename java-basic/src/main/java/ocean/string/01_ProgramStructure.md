@@ -139,10 +139,15 @@ switch(expression){
 学习Java语言的过程，也可以迁移到其他编程语言的学习
 1. Java 程序结构
 2. Java 面向对象
-3. Java 泛型
+3. Java 基础类库
 4. Java 异常处理
-5. Java 基础类库
-6. Java 集合
+5. Java 泛型
+6. Java 注解
+7. Java 集合
+8. Java IO
+9. Java 网络编程
+10. Java 并发编程
+
 
 
 

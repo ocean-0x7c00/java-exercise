@@ -36,6 +36,42 @@ OOP is a philosophy and is language neutral.
 
 
 
+### Polymorphism
+
+1.什么是多态？
+2.Java中的多态是如何实现的？
+编译时的多态:方法的重载
+运行时的多态：方法重写
+3.多态的内存结构
+
+### Inheritance
+1.为什么要有继承？
+为了复用属性或方法
+
+2.java中如何实现？
+使用extend关键字
+3.继承的内存结构
+4.继承的类型
+5.java继承的特点
+
+### Encapsulation
+
+1.什么是封装
+2.封装的好处
+3.Java如何实现封装
+Java提供访问控制符来实现封装
+Java提供了三个访问控制符private、protected和public，来实现四个访问控制级别。default访问
+级别没有对应的控制符
+ 
+
+### Abstraction
+### Class
+### Object
+### Method
+### Message Passing
+
+
+
 参考文献
 
 [What is Object-Oriented Programming](https://medium.com/learn-how-to-program/chapter-3-what-is-object-oriented-programming-d0a6ec0a7615)
