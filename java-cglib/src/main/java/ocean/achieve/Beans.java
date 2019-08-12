@@ -28,5 +28,6 @@ public class Beans {
         beanMap.put("age", 13);
 
 //        System.out.println(JSON.toJSONString(o));
+        System.out.println();
     }
 }
