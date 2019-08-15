@@ -55,3 +55,6 @@
 [tomcat源码分析(第二篇 tomcat启动过程详解)](https://juejin.im/post/5af176196fb9a07ac90d2ac8)
 
 [关于亲密关系](https://www.jianshu.com/p/2746aa7689ee)
+
+[漫话：如何给女朋友解释什么是Linux的五种IO模型](https://mp.weixin.qq.com/s?__biz=Mzg3MjA4MTExMw==&mid=2247484746&idx=1&sn=c0a7f9129d780786cabfcac0a8aa6bb7&source=41#wechat_redirect)
+[BIO NIO AIO](https://github.com/Snailclimb/JavaGuide/blob/master/docs/java/BIO-NIO-AIO.md#3-aio-asynchronous-io)

@@ -12,6 +12,7 @@ import java.io.*;
  * <p>
  * Java IO
  * 特点：以流的形式对数据进行读写，流是单向的
+ * 面向流，基于字节的操作，可以直接读写流
  * 分类：
  * 依据数据类型：字节流(inputStream和outputStream)和字符流(read和write)
  * 依据流的方向：输入流和输出流
@@ -33,9 +34,9 @@ import java.io.*;
  * @author ocean
  * @date 2019/8/15
  */
-public class BlockIO {
-    static String readFilePath = BlockIO.class.getClassLoader().getResource("readFile.txt").getPath();
-    static String writeFilePath = BlockIO.class.getClassLoader().getResource("writeFile.txt").getPath();
+public class BlockingIO {
+    static String readFilePath = BlockingIO.class.getClassLoader().getResource("readFile.txt").getPath();
+    static String writeFilePath = BlockingIO.class.getClassLoader().getResource("writeFile.txt").getPath();
     static String path = "/Users/ocean/ioFile.txt";
     static String bufferPath = "/Users/ocean/buffFile.txt";
     static String employeePath = "/Users/ocean/employee.txt";
