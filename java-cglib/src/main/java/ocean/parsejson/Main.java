@@ -127,45 +127,7 @@ public class Main {
 
 
         //1.根据路径用栈来构建json
-        for (String path : paths) {
-            String[] objects = path.split("\\.");
-            Stack<String> stack = new Stack();
-            Stack<JsonElement> elementStack = new Stack<>();
-            for (String object : objects) {
-                stack.push(object);
-            }
-            int len = stack.size();
-            for (int i = 0; i < len; i++) {
-                String node = stack.pop();
-                Boolean flag = equalPattern.matcher(node).matches();
-                if (flag) {
-                    String[] nodeValues = node.toString().split("\\=");
-                    JsonObject o = new JsonObject();
-                    o.add(nodeValues[0], new JsonPrimitive(nodeValues[1]));
-                    elementStack.push(o);
-                } else if (pattern.matcher(node).matches()) {
-                    //todo 数组
-                    JsonArray array = new JsonArray();
-                    JsonElement element = elementStack.pop();
-                    array.add(element);
-                    if ("root".equalsIgnoreCase(node.replaceAll("\\[\\d*\\]", ""))) {
-                        elementStack.push(array);
-                    } else {
-                        JsonObject o = new JsonObject();
-                        o.add(node.replaceAll("\\[\\d*\\]", ""), array);
-                        elementStack.push(o);
-                    }
-                } else {
-                    //todo 对象
-                    JsonObject o = new JsonObject();
-                    JsonElement element = elementStack.pop();
-                    o.add(node, element);
-                    elementStack.push(o);
 
-                }
-            }
-            list.add(elementStack.pop());
-        }
 
         //2.合并结果多个JSON
 
@@ -173,11 +135,15 @@ public class Main {
         String[] p1 = paths.get(1).split("\\.");
 
 
+        //todo 使用多路归并算法实现merge
         ArrayDeque<PathBean> s0 = enQueueing(p0);
         ArrayDeque<PathBean> s1 = enQueueing(p1);
         ArrayDeque<PathBean> merge = mergeQueue(s0, s1);
+
         System.out.println();
 
+
+        //获得最终的stack
         Stack<PathBean> stack = new Stack();
 
         while (true) {
@@ -191,12 +157,18 @@ public class Main {
         }
 
 
-        System.out.println( transformPathToJson(stack));
+        System.out.println(transformPathToJson(stack));
         System.out.println();
     }
 
 
-    public static String transformPathToJson(Stack<PathBean> stack) {
+    /**
+     * 解析路径为json
+     *
+     * @param stack
+     * @return
+     */
+    public static JsonElement transformPathToJson(Stack<PathBean> stack) {
         ArrayDeque<PathElement> subElementQueue = new ArrayDeque<>();
         Gson gson = new Gson();
         int len = stack.size();
@@ -223,17 +195,11 @@ public class Main {
                 } else if (pattern.matcher(nodePath).matches()) {
                     //数组 ([])
                     JsonArray array = new JsonArray();
-//                    JsonElement ele = subElementQueue.pop();
-//                    array.add(ele);
-
-
                     //从subElementStack中获取所有子节点
                     int subLen = subElementQueue.size();
                     for (int j = 0; j < subLen; j++) {
                         PathElement subBean = subElementQueue.pollFirst();
                         if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
-
-
                             array.add(subBean.getJsonElement());
                         } else {
                             subElementQueue.addLast(subBean);
@@ -248,7 +214,6 @@ public class Main {
                         element.setJsonElement(o);
                         subElementQueue.add(element);
                     }
-                    System.out.println();
                 } else {
                     //对象 (.)
                     JsonObject o = new JsonObject();
@@ -277,8 +242,7 @@ public class Main {
         int length = subElementQueue.size();
         if (length == 1) {
             PathElement element = subElementQueue.pollFirst();
-            element.getJsonElement();
-            return gson.toJson(element.getJsonElement());
+            return element.getJsonElement();
         } else {
             for (int i = 0; i < length; i++) {
                 PathElement subBean = subElementQueue.pollFirst();
@@ -290,13 +254,13 @@ public class Main {
                 }
             }
             Map<String, List<PathElement>> map = list.stream().collect(Collectors.groupingBy(o -> o.getPath().replaceAll("\\[\\d+\\]", "")));
-            Map<String, JsonElement> resultMap = new LinkedHashMap();
+            JsonObject resultMap = new JsonObject();
             for (Map.Entry<String, List<PathElement>> entry : map.entrySet()) {
                 JsonArray temp = new JsonArray();
                 entry.getValue().stream().map(o -> o.getJsonElement().getAsJsonObject().get(o.getPath())).forEach(o -> temp.addAll(o.getAsJsonArray()));
-                resultMap.put(entry.getKey(), temp);
+                resultMap.add(entry.getKey(), temp);
             }
-            return gson.toJson(resultMap,Map.class);
+            return resultMap;
         }
 
 
