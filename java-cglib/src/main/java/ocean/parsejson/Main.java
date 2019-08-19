@@ -123,20 +123,13 @@ public class Main {
         JsonArray result = new JsonArray();
         List<JsonElement> list = new ArrayList<>();
 
-
         //1.根据路径用栈来构建json
 
 
         //2.合并结果多个JSON
 
-        String[] p0 = paths.get(0).split("\\.");
-        String[] p1 = paths.get(1).split("\\.");
-
-
-        //todo 使用多路归并算法实现merge
-        ArrayDeque<PathBean> s0 = enQueueing(p0);
-        ArrayDeque<PathBean> s1 = enQueueing(p1);
-        ArrayDeque<PathBean> merge = mergeQueue(s0, s1);
+        //简单合并，算法实现merge
+        ArrayDeque<PathBean> merge = new ArrayDeque<PathBean>();
 
         for (int i = 0; i < paths.size(); i++) {
             int j = i + 1;
@@ -165,9 +158,8 @@ public class Main {
             }
         }
 
-
         System.out.println(transformPathToJson(stack));
-         System.out.println();
+        System.out.println();
     }
 
 
@@ -297,7 +289,6 @@ public class Main {
 
                     //对象比较的问题：重写equal和hashcode
 //                    CollectionUtils.union(Lists.newArrayList("object"),Lists.newArrayList("object"));
-
                     List unionList = (ArrayList) CollectionUtils.union(e1.getBeans(), e2.getBeans());
                     e1.getBeans().clear();
                     e1.setBeans(unionList);
@@ -306,13 +297,10 @@ public class Main {
                     arrayDeque.add(e1);
                     arrayDeque.add(e2);
                 }
-//                arrayDeque.add(l);
             } else if (e1 != null && e2 == null) {
                 arrayDeque.add(e1);
-//                arrayDeque.push(l);
             } else if (e1 == null && e2 != null) {
                 arrayDeque.add(e2);
-//                arrayDeque.push(l);
             } else {
                 //e1 == null && e2 == null
                 break;
@@ -352,35 +340,6 @@ public class Main {
         JsonElement sourceTree = jsonTree;
         for (int i = 0; i < pathArray.length; i++) {
             String path = pathArray[i];
-//            if (subJsonTree.isJsonPrimitive()) {
-//
-//            }
-//            if (subJsonTree.isJsonNull()) {
-//
-//            }
-//            if (subJsonTree.isJsonObject()) {
-//                JsonObject jsonObject = subJsonTree.getAsJsonObject();
-//                //查看path是否存在,并将他的子树赋给subJsonTree
-//                subJsonTree = jsonObject.get(path);
-//            } else if (subJsonTree.isJsonArray()) {
-//                JsonArray asJsonArray = subJsonTree.getAsJsonArray();
-//                String lastPathName = "array";
-//                String realPath = "array[0]";
-//                for (int j = 0; j < asJsonArray.size(); j++) {
-//                    JsonElement element = asJsonArray.get(j);
-//                    if (element.isJsonPrimitive()) {
-//                    }
-//                    if (element.isJsonNull()) {
-//                    }
-//                    if (element.isJsonObject()) {
-//
-//                    } else if (element.isJsonArray()) {
-//
-//                    }
-//                }
-//                System.out.println();
-//            }
-//            subJsonTree.getAsJsonObject().remove("name");
             subJsonTree = recursiveJsonTree(subJsonTree, path, deque, paths, sourceTree);
             if (subJsonTree == null) {
                 System.out.println("不存在");
@@ -389,8 +348,6 @@ public class Main {
 
             }
         }
-
-//        System.out.println(deque);
         System.out.println(new Gson().toJson(sourceTree));
         System.out.println();
     }
