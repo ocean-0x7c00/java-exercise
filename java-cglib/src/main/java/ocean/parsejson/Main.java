@@ -274,6 +274,21 @@ public class Main {
                     JsonObject o = new JsonObject();
                     Map map = new LinkedHashMap();
                     //从subElementStack中获取所有子节点
+                    Object[] objects = subElementQueue.toArray();
+                    for (int j = 0; j < objects.length; j++) {
+                        PathElement p = (PathElement) objects[j];
+                        if (p.getParentPath().equalsIgnoreCase(nodePath) && p.getJsonElement() != null) {
+                            map.putAll(gson.fromJson(p.getJsonElement(), Map.class));
+                            objects[j] = null;
+                        }
+                    }
+                    for (int j = 0; j < objects.length; j++) {
+                        if (objects[j] != null) {
+                            subElementQueue.add((PathElement) objects[j]);
+                        }
+                    }
+
+
 
                     PathElement subBean1 = subList.stream().filter(bean -> bean.getParentPath().equalsIgnoreCase(nodePath) && bean.getJsonElement() != null).findAny().orElse(null);
                     if (subBean1 != null) {
@@ -283,15 +298,15 @@ public class Main {
                     }
 
 
-                    int subLen = subElementQueue.size();
-                    for (int j = 0; j < subLen; j++) {
-                        PathElement subBean = subElementQueue.pollFirst();
-                        if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
-//                            map.putAll(gson.fromJson(subBean.getJsonElement(), Map.class));
-                        } else {
-                            subElementQueue.addLast(subBean);
-                        }
-                    }
+//                    int subLen = subElementQueue.size();
+//                    for (int j = 0; j < subLen; j++) {
+//                        PathElement subBean = subElementQueue.pollFirst();
+//                        if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
+////                            map.putAll(gson.fromJson(subBean.getJsonElement(), Map.class));
+//                        } else {
+//                            subElementQueue.addLast(subBean);
+//                        }
+//                    }
                     o.add(nodePath.replaceAll("\\[\\d*\\]", ""), new Gson().toJsonTree(map));
                     element.setJsonElement(o);
                     subElementQueue.add(element);
