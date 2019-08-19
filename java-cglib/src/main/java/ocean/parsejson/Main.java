@@ -1,12 +1,10 @@
 package ocean.parsejson;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import com.google.gson.stream.JsonToken;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -110,7 +108,7 @@ public class Main {
 
 
 //        String[] paths = {"object.a=\"name is a\"", "object.b.a=\"b name\""};
-        String[] paths = {"object[0].a=\"name is a\"", "object[1].b.a=\"b name\""};
+        String[] paths = {"object[0].a=\"name is a\"", "object[1].b.a=\"b name\"", "object[3].c=\"name is c\""};
         buildJosnTree(Arrays.asList(paths));
     }
 
@@ -140,6 +138,17 @@ public class Main {
         ArrayDeque<PathBean> s1 = enQueueing(p1);
         ArrayDeque<PathBean> merge = mergeQueue(s0, s1);
 
+        for (int i = 0; i < paths.size(); i++) {
+            int j = i + 1;
+            if (j < paths.size()) {
+                ArrayDeque<PathBean> q1 = enQueueing(paths.get(i).split("\\."));
+                ArrayDeque<PathBean> q2 = enQueueing(paths.get(j).split("\\."));
+                merge = mergeQueue(merge, mergeQueue(q1, q2));
+            } else {
+                ArrayDeque<PathBean> q1 = enQueueing(paths.get(i).split("\\."));
+                merge = mergeQueue(merge, mergeQueue(q1, null));
+            }
+        }
         System.out.println();
 
 
@@ -158,7 +167,7 @@ public class Main {
 
 
         System.out.println(transformPathToJson(stack));
-        System.out.println();
+         System.out.println();
     }
 
 
@@ -275,6 +284,9 @@ public class Main {
      * @return
      */
     public static ArrayDeque<PathBean> mergeQueue(ArrayDeque<PathBean> queue1, ArrayDeque<PathBean> queue2) {
+        if (queue2 == null) {
+            return queue1;
+        }
         ArrayDeque<PathBean> arrayDeque = new ArrayDeque<PathBean>();
         while (true) {
             PathBean e1 = queue1.pollFirst();
