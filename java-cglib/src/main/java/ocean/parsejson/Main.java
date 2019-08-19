@@ -141,7 +141,11 @@ public class Main {
         //简单合并，算法实现merge
         ArrayDeque<PathBean> merge = new ArrayDeque<PathBean>();
 
-        for (int i = 0; i < paths.size(); i++) {
+        int pathSize = paths.size();
+        for (int i = 0; i < pathSize; i = i + 2) {
+            if (i > pathSize) {
+                break;
+            }
             int j = i + 1;
             if (j < paths.size()) {
                 ArrayDeque<PathBean> q1 = enQueueing(paths.get(i).split("\\."));
@@ -300,9 +304,10 @@ public class Main {
 
                     //对象比较的问题：重写equal和hashcode
 //                    CollectionUtils.union(Lists.newArrayList("object"),Lists.newArrayList("object"));
-                    List unionList = (ArrayList) CollectionUtils.union(e1.getBeans(), e2.getBeans());
-                    e1.getBeans().clear();
-                    e1.setBeans(unionList);
+//                    List unionList = (ArrayList) CollectionUtils.union(e1.getBeans(), e2.getBeans());
+//                    e1.getBeans().clear();
+//                    e1.setBeans(unionList);
+                    e1.getBeans().addAll(e2.getBeans());
                     arrayDeque.add(e1);
                 } else {
                     arrayDeque.add(e1);
