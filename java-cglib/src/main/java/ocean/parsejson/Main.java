@@ -2,7 +2,6 @@ package ocean.parsejson;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import com.google.gson.stream.JsonToken;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
@@ -191,8 +190,7 @@ public class Main {
             //为栈顶元素构建对象
             for (PathElement element : pathElements) {
                 String nodePath = element.getPath();
-                Boolean flag = equalPattern.matcher(nodePath).matches();
-                if (flag) {
+                if ("value".equals(element.getPathType())) {
                     //叶子节点 (=)
                     String[] nodeValues = nodePath.split("\\=");
                     JsonObject o = new JsonObject();
@@ -206,41 +204,71 @@ public class Main {
                     //key id+"."+level
                     subList.add(element);
 
-                } else if (pattern.matcher(nodePath).matches()) {
+                } else if ("array".equals(element.getPathType())) {
                     //数组 ([])
                     JsonArray array = new JsonArray();
                     //从subElementStack中获取所有子节点处理子层级所有的元素
+                    //将Element下对应的元素添加到array中
+                    Object[] objects = subElementQueue.toArray();
+                    subElementQueue.clear();
+                    for (int j = 0; j < objects.length; j++) {
+                        PathElement p = (PathElement) objects[j];
+                        if (p.getParentPath().equalsIgnoreCase(nodePath) && p.getJsonElement() != null) {
+                            array.add(p.getJsonElement());
+                            objects[j] = null;
+                        }
+                    }
+                    for (int j = 0; j < objects.length; j++) {
+                        if (objects[j] != null) {
+                            subElementQueue.add((PathElement) objects[j]);
+                        }
+                    }
+                    //根据父类的类型创建对象
+                    if (element.getParentType().equals("")) {
+                        JsonObject o = new JsonObject();
+                        o.add(nodePath.replaceAll("\\[\\d*\\]", ""), array);
+                        element.setJsonElement(o);
+                        subElementQueue.add(element);
+                        subList.add(element);
+                    } else if (element.getParentType().equals("")) {
+                        JsonArray jsonArray = new JsonArray();
+                        jsonArray.add(array);
+                        element.setJsonElement(jsonArray);
+                        subElementQueue.add(element);
+
+                    }
 
                     PathElement subBean1 = subList.stream().filter(o -> o.getParentPath().equalsIgnoreCase(nodePath) && o.getJsonElement() != null).findAny().orElse(null);
                     if (subBean1 != null) {
                         array.add(subBean1.getJsonElement());
                         subList.remove(subBean1);
 
+
                     }
 
-                    int subLen = subElementQueue.size();
-                    for (int j = 0; j < subLen; j++) {
-                        PathElement subBean = subElementQueue.pollFirst();
-                        if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
-//                            array.add(subBean.getJsonElement());
-                        } else {
-                            subElementQueue.addLast(subBean);
-                        }
-                    }
+//                    int subLen = subElementQueue.size();
+//                    for (int j = 0; j < subLen; j++) {
+//                        PathElement subBean = subElementQueue.pollFirst();
+//                        if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
+////                            array.add(subBean.getJsonElement());
+//                        } else {
+//                            subElementQueue.addLast(subBean);
+//                        }
+//                    }
 
-                    if ("root".equalsIgnoreCase(nodePath.replaceAll("\\[\\d*\\]", ""))) {
-//                        subElementQueue.push(array);
-                    } else {
-                        JsonObject o = new JsonObject();
-                        if (nodePath == null) {
-                            System.out.println();
-                        }
-
-                        o.add(nodePath.replaceAll("\\[\\d*\\]", ""), array);
-                        element.setJsonElement(o);
-                        subElementQueue.add(element);
-                        subList.add(element);
-                    }
+//                    if ("root".equalsIgnoreCase(nodePath.replaceAll("\\[\\d*\\]", ""))) {
+////                        subElementQueue.push(array);
+//                    } else {
+//                        JsonObject o = new JsonObject();
+//                        if (nodePath == null) {
+//                            System.out.println();
+//                        }
+//
+//                        o.add(nodePath.replaceAll("\\[\\d*\\]", ""), array);
+//                        element.setJsonElement(o);
+//                        subElementQueue.add(element);
+//                        subList.add(element);
+//                    }
                 } else {
                     //对象 (.)
                     JsonObject o = new JsonObject();
@@ -270,7 +298,7 @@ public class Main {
                     subList.add(element);
                 }
 
-            }//处理同level的元素
+            }//end-for处理同level的元素
 
         }
 
@@ -368,9 +396,10 @@ public class Main {
             String path = array[i];
             String parentPath = (i - 1) < 0 ? array[i] : array[i - 1];
             String childPath = (i + 1) < array.length ? array[i + 1] : null;
-            JsonToken parentType = pattern.matcher(parentPath).matches() ? JsonToken.BEGIN_ARRAY : JsonToken.BEGIN_OBJECT;
+            String parentType = pattern.matcher(parentPath).matches() ? "array" : equalPattern.matcher(parentPath).matches() ? "value" : "object";
+            String pathType = pattern.matcher(path).matches() ? "array" : equalPattern.matcher(path).matches() ? "value" : "object";
             PathElement ele =
-                    PathElement.builder().level(level).path(path).childPath(childPath).parentPath(parentPath).parentType(parentType).build();
+                    PathElement.builder().level(level).path(path).childPath(childPath).parentPath(parentPath).parentType(parentType).pathType(pathType).build();
             queue.add(PathBean.builder().level(level).beans(Lists.newArrayList(ele)).build());
         }
         return queue;

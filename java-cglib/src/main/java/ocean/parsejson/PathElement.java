@@ -3,7 +3,6 @@ package ocean.parsejson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonToken;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,13 +23,15 @@ public class PathElement {
 
     private String path;
 
+    private String pathType;
+
     private String elemetnKey;
 
     private String childPath;
 
     private String parentPath;
 
-    private JsonToken parentType;
+    private String parentType;
 
     private JsonObject leafNode;
 
