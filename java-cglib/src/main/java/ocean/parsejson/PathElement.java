@@ -18,9 +18,15 @@ import lombok.Setter;
 @Builder
 @EqualsAndHashCode
 public class PathElement {
+
+
     private String level;
 
     private String path;
+
+    private String elemetnKey;
+
+    private String childPath;
 
     private String parentPath;
 

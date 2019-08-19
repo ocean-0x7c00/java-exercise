@@ -108,7 +108,15 @@ public class Main {
 
 
 //        String[] paths = {"object.a=\"name is a\"", "object.b.a=\"b name\""};
-        String[] paths = {"object[0].a=\"name is a\"", "object[1].b.a=\"b name\"", "object[3].c=\"name is c\""};
+        String[] paths = {
+                "num[1].data1.p[9].a=\"1\"",
+                "num[0].data1.p[4].a=\"2\"",
+                "num[3].data1.p[0].a=\"3\"",
+                "num[2].data1.p[5].a=\"4\"",
+                "num[3].data1.p[1].a=\"5\"",
+                "num[1].data1.p[8].a=\"6\""
+
+        };
         buildJosnTree(Arrays.asList(paths));
     }
 
@@ -117,6 +125,7 @@ public class Main {
      */
     static Pattern pattern = Pattern.compile("(.*)\\[\\d+\\]");
     static Pattern equalPattern = Pattern.compile("\\S*\\s*=\\s*\"(.*?)\"");
+    static Random random = new Random();
 
     public static void buildJosnTree(List<String> paths) {
         //最终结果
@@ -171,6 +180,7 @@ public class Main {
      */
     public static JsonElement transformPathToJson(Stack<PathBean> stack) {
         ArrayDeque<PathElement> subElementQueue = new ArrayDeque<>();
+        List<PathElement> subList = new ArrayList<>();
         Gson gson = new Gson();
         int len = stack.size();
         for (int i = 0; i < len; i++) {
@@ -193,15 +203,26 @@ public class Main {
                     //处理过的节点放到新的stack中
                     subElementQueue.add(element);
 
+                    element.setElemetnKey(nodeValues[0] + random.nextInt(100));
+                    //key id+"."+level
+                    subList.add(element);
+
                 } else if (pattern.matcher(nodePath).matches()) {
                     //数组 ([])
                     JsonArray array = new JsonArray();
-                    //从subElementStack中获取所有子节点
+                    //从subElementStack中获取所有子节点处理子层级所有的元素
+
+                    PathElement subBean1 = subList.stream().filter(o -> o.getParentPath().equalsIgnoreCase(nodePath) && o.getJsonElement() != null).findAny().orElse(null);
+                    if (subBean1 != null) {
+                        array.add(subBean1.getJsonElement());
+                        subList.remove(subBean1);
+
+                    }
                     int subLen = subElementQueue.size();
                     for (int j = 0; j < subLen; j++) {
                         PathElement subBean = subElementQueue.pollFirst();
                         if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
-                            array.add(subBean.getJsonElement());
+//                            array.add(subBean.getJsonElement());
                         } else {
                             subElementQueue.addLast(subBean);
                         }
@@ -211,9 +232,14 @@ public class Main {
 //                        subElementQueue.push(array);
                     } else {
                         JsonObject o = new JsonObject();
-                        o.add(nodePath, array);
+                        if (nodePath == null) {
+                            System.out.println();
+                        }
+                        String na = nodePath.replaceAll("\\[\\d*\\]", "");
+                        o.add(na, array);
                         element.setJsonElement(o);
                         subElementQueue.add(element);
+                        subList.add(element);
                     }
                 } else {
                     //对象 (.)
@@ -221,11 +247,19 @@ public class Main {
                     Map map = new LinkedHashMap();
                     //从subElementStack中获取所有子节点
 
+                    PathElement subBean1 = subList.stream().filter(bean -> bean.getParentPath().equalsIgnoreCase(nodePath) && bean.getJsonElement() != null).findAny().orElse(null);
+                    if (subBean1 != null) {
+                        map.putAll(gson.fromJson(subBean1.getJsonElement(), Map.class));
+                        subList.remove(subBean1);
+
+                    }
+
+
                     int subLen = subElementQueue.size();
                     for (int j = 0; j < subLen; j++) {
                         PathElement subBean = subElementQueue.pollFirst();
                         if (subBean.getParentPath().equalsIgnoreCase(nodePath) && subBean.getJsonElement() != null) {
-                            map.putAll(gson.fromJson(subBean.getJsonElement(), Map.class));
+//                            map.putAll(gson.fromJson(subBean.getJsonElement(), Map.class));
                         } else {
                             subElementQueue.addLast(subBean);
                         }
@@ -233,6 +267,7 @@ public class Main {
                     o.add(nodePath, new Gson().toJsonTree(map));
                     element.setJsonElement(o);
                     subElementQueue.add(element);
+                    subList.add(element);
                 }
 
             }//处理同level的元素
@@ -258,7 +293,17 @@ public class Main {
             JsonObject resultMap = new JsonObject();
             for (Map.Entry<String, List<PathElement>> entry : map.entrySet()) {
                 JsonArray temp = new JsonArray();
-                entry.getValue().stream().map(o -> o.getJsonElement().getAsJsonObject().get(o.getPath())).forEach(o -> temp.addAll(o.getAsJsonArray()));
+                entry.getValue().stream().
+                        map(o -> {
+                                    JsonObject asJsonObject = o.getJsonElement().getAsJsonObject();
+                                    JsonElement element = asJsonObject.get(o.getPath().replaceAll("\\[\\d*\\]",""));
+                                    return element;
+
+                                }
+
+
+                        ).
+                        forEach(o -> temp.addAll(o.getAsJsonArray()));
                 resultMap.add(entry.getKey(), temp);
             }
             return resultMap;
@@ -322,9 +367,10 @@ public class Main {
             String level = String.format("level%s", i);
             String path = array[i];
             String parentPath = (i - 1) < 0 ? array[i] : array[i - 1];
+            String childPath = (i + 1) < array.length ? array[i + 1] : null;
             JsonToken parentType = pattern.matcher(parentPath).matches() ? JsonToken.BEGIN_ARRAY : JsonToken.BEGIN_OBJECT;
             PathElement ele =
-                    PathElement.builder().level(level).path(path).parentPath(parentPath).parentType(parentType).build();
+                    PathElement.builder().level(level).path(path).childPath(childPath).parentPath(parentPath).parentType(parentType).build();
             queue.add(PathBean.builder().level(level).beans(Lists.newArrayList(ele)).build());
         }
         return queue;
