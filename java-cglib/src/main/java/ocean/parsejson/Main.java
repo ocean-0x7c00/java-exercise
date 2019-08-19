@@ -115,7 +115,8 @@ public class Main {
                 "homepage[2].data.poilist[5].third_category=\"中式简餐\"",
                 "homepage[3].data.poilist[1].third_category=\"米粉米线\"",
                 "homepage[1].data2.poilist[8].third_category=\"西北菜\"",
-                "name.data.poilist[8].third_category=\"西北菜\""
+                "name.data.poilist[8].third_category=\"西北菜\"",
+                "a.b.c.third_category=\"西北菜\""
 
         };
         buildJosnTree(Arrays.asList(paths));
@@ -209,13 +210,23 @@ public class Main {
                     subElementQueue.add(element);
                 } else if (ElementTypeEnum.array.name().equals(element.getPathType())) {
                     //数组 ([])
+                    if (element.getPath().equals("poilist[8]")) {
+                        System.out.println();
+                    }
                     JsonArray array = new JsonArray();
                     //从subElementStack中获取所有子节点处理子层级所有的元素
-                    for (int j = 0; j < objects.length; j++) {
-                        PathElement p = (PathElement) objects[j];
-                        if (p != null && p.getParentPath().equalsIgnoreCase(nodePath) && p.getJsonElement() != null) {
-                            array.add(p.getJsonElement());
-                            objects[j] = null;
+                    if (element.getChildPath() != null && equalPattern.matcher(element.getChildPath()).matches()) {
+                        String[] nodeValues = element.getChildPath().split("\\=");
+                        JsonObject o = new JsonObject();
+                        o.add(nodeValues[0], new JsonPrimitive(nodeValues[1].replaceAll("\"", "")));
+                        array.add(o);
+                    } else {
+                        for (int j = 0; j < objects.length; j++) {
+                            PathElement p = (PathElement) objects[j];
+                            if (p != null && p.getParentPath().equalsIgnoreCase(nodePath) && p.getJsonElement() != null) {
+                                array.add(p.getJsonElement());
+                                objects[j] = null;
+                            }
                         }
                     }
                     element.setJsonElement(array);
