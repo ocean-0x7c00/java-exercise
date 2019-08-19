@@ -109,12 +109,12 @@ public class Main {
 
 //        String[] paths = {"object.a=\"name is a\"", "object.b.a=\"b name\""};
         String[] paths = {
-                "num[1].data1.p[9].a=\"1\"",
-                "num[0].data1.p[4].a=\"2\"",
-                "num[3].data1.p[0].a=\"3\"",
-                "num[2].data1.p[5].a=\"4\"",
-                "num[3].data1.p[1].a=\"5\"",
-                "num[1].data1.p[8].a=\"6\""
+                "homepage[1].data.poilist[9].third_category=\"饺子\"",
+                "homepage[0].data.poilist[4].third_category=\"中式简餐\"",
+                "homepage[3].data.poilist[0].third_category=\"凉皮\"",
+                "homepage[2].data.poilist[5].third_category=\"中式简餐\"",
+                "homepage[3].data.poilist[1].third_category=\"米粉米线\"",
+                "homepage[1].data.poilist[8].third_category=\"西北菜\""
 
         };
         buildJosnTree(Arrays.asList(paths));
@@ -203,7 +203,6 @@ public class Main {
                     //处理过的节点放到新的stack中
                     subElementQueue.add(element);
 
-                    element.setElemetnKey(nodeValues[0] + random.nextInt(100));
                     //key id+"."+level
                     subList.add(element);
 
@@ -218,6 +217,7 @@ public class Main {
                         subList.remove(subBean1);
 
                     }
+
                     int subLen = subElementQueue.size();
                     for (int j = 0; j < subLen; j++) {
                         PathElement subBean = subElementQueue.pollFirst();
@@ -235,8 +235,8 @@ public class Main {
                         if (nodePath == null) {
                             System.out.println();
                         }
-                        String na = nodePath.replaceAll("\\[\\d*\\]", "");
-                        o.add(na, array);
+
+                        o.add(nodePath.replaceAll("\\[\\d*\\]", ""), array);
                         element.setJsonElement(o);
                         subElementQueue.add(element);
                         subList.add(element);
@@ -264,7 +264,7 @@ public class Main {
                             subElementQueue.addLast(subBean);
                         }
                     }
-                    o.add(nodePath, new Gson().toJsonTree(map));
+                    o.add(nodePath.replaceAll("\\[\\d*\\]", ""), new Gson().toJsonTree(map));
                     element.setJsonElement(o);
                     subElementQueue.add(element);
                     subList.add(element);
@@ -296,7 +296,7 @@ public class Main {
                 entry.getValue().stream().
                         map(o -> {
                                     JsonObject asJsonObject = o.getJsonElement().getAsJsonObject();
-                                    JsonElement element = asJsonObject.get(o.getPath().replaceAll("\\[\\d*\\]",""));
+                                    JsonElement element = asJsonObject.get(o.getPath().replaceAll("\\[\\d*\\]", ""));
                                     return element;
 
                                 }
