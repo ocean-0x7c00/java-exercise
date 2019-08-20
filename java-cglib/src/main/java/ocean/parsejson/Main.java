@@ -2,9 +2,7 @@ package ocean.parsejson;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import org.apache.commons.collections4.CollectionUtils;
 
-import java.lang.annotation.ElementType;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -107,6 +105,9 @@ public class Main {
 //        System.out.println();
 
 
+//        homepage.data.poilist.third_category
+        //third_category
+        //wmPoiScore
 //        String[] paths = {"object.a=\"name is a\"", "object.b.a=\"b name\""};
         String[] paths = {
                 "homepage[1].data.poilist[9].third_category=\"饺子\"",
@@ -115,8 +116,11 @@ public class Main {
                 "homepage[2].data.poilist[5].third_category=\"中式简餐\"",
                 "homepage[3].data.poilist[1].third_category=\"米粉米线\"",
                 "homepage[1].data2.poilist[8].third_category=\"西北菜\"",
-                "name.data.poilist[8].third_category=\"西北菜\"",
-                "a.b.c.third_category=\"西北菜\""
+                "homepage[0].data.shopList[0].wmPoiScore=17"
+//                "name.data.poilist[8].third_category=\"西北菜\"",
+//                "a.b.c.object=1",
+//                "a.b.c.array[0].ab=1"
+
 
         };
         buildJosnTree(Arrays.asList(paths));
@@ -126,7 +130,7 @@ public class Main {
      * 使用正则预编译，加快匹配速度
      */
     static Pattern pattern = Pattern.compile("(.*)\\[\\d+\\]");
-    static Pattern equalPattern = Pattern.compile("\\S*\\s*=\\s*\"(.*?)\"");
+    static Pattern equalPattern = Pattern.compile("(.*)=(.*)");
     static Random random = new Random();
 
     public static void buildJosnTree(List<String> paths) {
@@ -210,9 +214,6 @@ public class Main {
                     subElementQueue.add(element);
                 } else if (ElementTypeEnum.array.name().equals(element.getPathType())) {
                     //数组 ([])
-                    if (element.getPath().equals("poilist[8]")) {
-                        System.out.println();
-                    }
                     JsonArray array = new JsonArray();
                     //从subElementStack中获取所有子节点处理子层级所有的元素
                     if (element.getChildPath() != null && equalPattern.matcher(element.getChildPath()).matches()) {
@@ -241,13 +242,10 @@ public class Main {
                         if (p == null) {
                             continue;
                         }
-                        if (element.getPath().equals("data2")) {
-                            System.out.println();
-                        }
                         if ((element.getChildPath().equalsIgnoreCase(p.getPath()) && p.getParentPath().equals(element.getPath())) && p.getJsonElement() != null) {
                             if (ElementTypeEnum.array.name().equals(p.getPathType())) {
                                 map.put(p.getPath().replaceAll("\\[\\d*\\]", ""), gson.fromJson(p.getJsonElement(), List.class));
-                            } else if (ElementTypeEnum.object.name().equals(p.getPathType())) {
+                            } else if (ElementTypeEnum.object.name().equals(p.getPathType()) || ElementTypeEnum.value.name().equals(p.getPathType())) {
                                 map.putAll(gson.fromJson(p.getJsonElement(), Map.class));
                             }
                             objects[j] = null;
